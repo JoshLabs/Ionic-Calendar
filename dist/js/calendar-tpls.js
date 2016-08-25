@@ -690,6 +690,11 @@ angular.module('ui.rCalendar', ['ui.rCalendar.tpls'])
                 scope.allDayLabel = ctrl.allDayLabel;
                 scope.hourParts = ctrl.hourParts;
 
+                scope.fetchWeekEventClass = function(event) {
+                    return event.event.className ? event.event.className : '';
+                };
+
+
                 function getDates(startTime, n) {
                     var dates = new Array(n),
                         current = new Date(startTime),
@@ -982,6 +987,10 @@ angular.module('ui.rCalendar', ['ui.rCalendar.tpls'])
                 scope.allDayLabel = ctrl.allDayLabel;
                 scope.hourParts = ctrl.hourParts;
 
+                scope.fetchDayEventClass = function(event) {
+                    return event.event.className ? event.event.className : '';
+                };
+
                 function createDateObjects(startTime) {
                     var rows = [],
                         time,
@@ -1167,6 +1176,7 @@ angular.module("templates/rcalendar/day.html", []).run(["$templateCache", functi
     "                            <td class=\"calendar-cell\" ng-class=\"{'calendar-event-wrap':view.allDayEvents.length>0}\"\n" +
     "                                ng-if=\"$index===currentViewIndex\" ng-style=\"{height: 25*view.allDayEvents.length+'px'}\">\n" +
     "                                <div ng-repeat=\"displayEvent in view.allDayEvents\" class=\"calendar-event\"\n" +
+    "                                     ng-class=\"fetchDayEventClass(displayEvent)\"\n" +
     "                                     ng-click=\"eventSelected({event:displayEvent.event})\"\n" +
     "                                     ng-style=\"{top: 25*$index+'px',width: '100%',height:'25px'}\">\n" +
     "                                    <div class=\"calendar-event-inner\">{{displayEvent.event.title}}</div>\n" +
@@ -1190,6 +1200,7 @@ angular.module("templates/rcalendar/day.html", []).run(["$templateCache", functi
     "                        <td class=\"calendar-cell\" ng-click=\"select(tm.time, tm.events)\">\n" +
     "                            <div ng-class=\"{'calendar-event-wrap': tm.events}\" ng-if=\"tm.events\">\n" +
     "                                <div ng-repeat=\"displayEvent in tm.events\" class=\"calendar-event\"\n" +
+    "                                     ng-class=\"fetchDayEventClass(displayEvent)\"\n" +
     "                                     ng-click=\"eventSelected({event:displayEvent.event})\"\n" +
     "                                     ng-style=\"{top: (37*displayEvent.startOffset/hourParts)+'px', left: 100/displayEvent.overlapNumber*displayEvent.position+'%', width: 100/displayEvent.overlapNumber+'%', height: 37*(displayEvent.endIndex -displayEvent.startIndex - (displayEvent.endOffset + displayEvent.startOffset)/hourParts)+'px'}\">\n" +
     "                                    <div class=\"calendar-event-inner\">{{displayEvent.event.title}}</div>\n" +
@@ -1235,140 +1246,141 @@ angular.module("templates/rcalendar/month.html", []).run(["$templateCache", func
     "                <tbody>\n" +
     "                <tr>\n" +
     "                    <td ng-click=\"select(view.dates[0].date, view.dates[0].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[0])\">{{view.dates[0].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[0])\">\n" +
+    "                        <span>{{view.dates[0].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[1].date, view.dates[1].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[1])\">{{view.dates[1].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[1])\"><span>{{view.dates[1].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[2].date, view.dates[2].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[2])\">{{view.dates[2].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[2])\"><span>{{view.dates[2].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[3].date, view.dates[3].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[3])\">{{view.dates[3].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[3])\"><span>{{view.dates[3].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[4].date, view.dates[4].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[4])\">{{view.dates[4].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[4])\"><span>{{view.dates[4].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[5].date, view.dates[5].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[5])\">{{view.dates[5].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[5])\"><span>{{view.dates[5].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[6].date, view.dates[6].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[6])\">{{view.dates[6].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[6])\"><span>{{view.dates[6].label}}</span>\n" +
     "                    </td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
     "                    <td ng-click=\"select(view.dates[7].date, view.dates[7].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[7])\">{{view.dates[7].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[7])\"><span>{{view.dates[7].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[8].date, view.dates[8].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[8])\">{{view.dates[8].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[8])\"><span>{{view.dates[8].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[9].date, view.dates[9].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[9])\">{{view.dates[9].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[9])\"><span>{{view.dates[9].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[10].date, view.dates[10].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[10])\">{{view.dates[10].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[10])\"><span>{{view.dates[10].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[11].date, view.dates[11].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[11])\">{{view.dates[11].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[11])\"><span>{{view.dates[11].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[12].date, view.dates[12].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[12])\">{{view.dates[12].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[12])\"><span>{{view.dates[12].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[13].date, view.dates[13].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[13])\">{{view.dates[13].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[13])\"><span>{{view.dates[13].label}}</span>\n" +
     "                    </td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
     "                    <td ng-click=\"select(view.dates[14].date, view.dates[14].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[14])\">{{view.dates[14].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[14])\"><span>{{view.dates[14].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[15].date, view.dates[15].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[15])\">{{view.dates[15].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[15])\"><span>{{view.dates[15].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[16].date, view.dates[16].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[16])\">{{view.dates[16].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[16])\"><span>{{view.dates[16].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[17].date, view.dates[17].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[17])\">{{view.dates[17].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[17])\"><span>{{view.dates[17].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[18].date, view.dates[18].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[18])\">{{view.dates[18].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[18])\"><span>{{view.dates[18].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[19].date, view.dates[19].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[19])\">{{view.dates[19].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[19])\"><span>{{view.dates[19].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[20].date, view.dates[20].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[20])\">{{view.dates[20].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[20])\"><span>{{view.dates[20].label}}</span>\n" +
     "                    </td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
     "                    <td ng-click=\"select(view.dates[21].date, view.dates[21].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[21])\">{{view.dates[21].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[21])\"><span>{{view.dates[21].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[22].date, view.dates[22].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[22])\">{{view.dates[22].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[22])\"><span>{{view.dates[22].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[23].date, view.dates[23].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[23])\">{{view.dates[23].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[23])\"><span>{{view.dates[23].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[24].date, view.dates[24].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[24])\">{{view.dates[24].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[24])\"><span>{{view.dates[24].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[25].date, view.dates[25].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[25])\">{{view.dates[25].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[25])\"><span>{{view.dates[25].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[26].date, view.dates[26].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[26])\">{{view.dates[26].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[26])\"><span>{{view.dates[26].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[27].date, view.dates[27].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[27])\">{{view.dates[27].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[27])\"><span>{{view.dates[27].label}}</span>\n" +
     "                    </td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
     "                    <td ng-click=\"select(view.dates[28].date, view.dates[28].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[28])\">{{view.dates[28].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[28])\"><span>{{view.dates[28].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[29].date, view.dates[29].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[29])\">{{view.dates[29].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[29])\"><span>{{view.dates[29].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[30].date, view.dates[30].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[30])\">{{view.dates[30].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[30])\"><span>{{view.dates[30].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[31].date, view.dates[31].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[31])\">{{view.dates[31].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[31])\"><span>{{view.dates[31].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[32].date, view.dates[32].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[32])\">{{view.dates[32].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[32])\"><span>{{view.dates[32].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[33].date, view.dates[33].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[33])\">{{view.dates[33].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[33])\"><span>{{view.dates[33].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[34].date, view.dates[34].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[34])\">{{view.dates[34].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[34])\"><span>{{view.dates[34].label}}</span>\n" +
     "                    </td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
     "                    <td ng-click=\"select(view.dates[35].date, view.dates[35].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[35])\">{{view.dates[35].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[35])\"><span>{{view.dates[35].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[36].date, view.dates[36].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[36])\">{{view.dates[36].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[36])\"><span>{{view.dates[36].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[37].date, view.dates[37].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[37])\">{{view.dates[37].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[37])\"><span>{{view.dates[37].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[38].date, view.dates[38].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[38])\">{{view.dates[38].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[38])\"><span>{{view.dates[38].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[39].date, view.dates[39].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[39])\">{{view.dates[39].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[39])\"><span>{{view.dates[39].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[40].date, view.dates[40].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[40])\">{{view.dates[40].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[40])\"><span>{{view.dates[40].label}}</span>\n" +
     "                    </td>\n" +
     "                    <td ng-click=\"select(view.dates[41].date, view.dates[41].events)\"\n" +
-    "                        ng-class=\"getHighlightClass(view.dates[41])\">{{view.dates[41].label}}\n" +
+    "                        ng-class=\"getHighlightClass(view.dates[41])\"><span>{{view.dates[41].label}}</span>\n" +
     "                    </td>\n" +
     "                </tr>\n" +
     "                </tbody>\n" +
@@ -1383,58 +1395,58 @@ angular.module("templates/rcalendar/month.html", []).run(["$templateCache", func
     "                </thead>\n" +
     "                <tbody>\n" +
     "                <tr>\n" +
-    "                    <td>{{view.dates[0].label}}</td>\n" +
-    "                    <td>{{view.dates[1].label}}</td>\n" +
-    "                    <td>{{view.dates[2].label}}</td>\n" +
-    "                    <td>{{view.dates[3].label}}</td>\n" +
-    "                    <td>{{view.dates[4].label}}</td>\n" +
-    "                    <td>{{view.dates[5].label}}</td>\n" +
-    "                    <td>{{view.dates[6].label}}</td>\n" +
+    "                    <td><span>{{view.dates[0].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[1].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[2].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[3].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[4].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[5].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[6].label}}</span></td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
-    "                    <td>{{view.dates[7].label}}</td>\n" +
-    "                    <td>{{view.dates[8].label}}</td>\n" +
-    "                    <td>{{view.dates[9].label}}</td>\n" +
-    "                    <td>{{view.dates[10].label}}</td>\n" +
-    "                    <td>{{view.dates[11].label}}</td>\n" +
-    "                    <td>{{view.dates[12].label}}</td>\n" +
-    "                    <td>{{view.dates[13].label}}</td>\n" +
+    "                    <td><span>{{view.dates[7].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[8].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[9].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[10].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[11].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[12].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[13].label}}</span></td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
-    "                    <td>{{view.dates[14].label}}</td>\n" +
-    "                    <td>{{view.dates[15].label}}</td>\n" +
-    "                    <td>{{view.dates[16].label}}</td>\n" +
-    "                    <td>{{view.dates[17].label}}</td>\n" +
-    "                    <td>{{view.dates[18].label}}</td>\n" +
-    "                    <td>{{view.dates[19].label}}</td>\n" +
-    "                    <td>{{view.dates[20].label}}</td>\n" +
+    "                    <td><span>{{view.dates[14].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[15].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[16].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[17].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[18].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[19].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[20].label}}</span></td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
-    "                    <td>{{view.dates[21].label}}</td>\n" +
-    "                    <td>{{view.dates[22].label}}</td>\n" +
-    "                    <td>{{view.dates[23].label}}</td>\n" +
-    "                    <td>{{view.dates[24].label}}</td>\n" +
-    "                    <td>{{view.dates[25].label}}</td>\n" +
-    "                    <td>{{view.dates[26].label}}</td>\n" +
-    "                    <td>{{view.dates[27].label}}</td>\n" +
+    "                    <td><span>{{view.dates[21].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[22].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[23].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[24].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[25].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[26].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[27].label}}</span></td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
-    "                    <td>{{view.dates[28].label}}</td>\n" +
-    "                    <td>{{view.dates[29].label}}</td>\n" +
-    "                    <td>{{view.dates[30].label}}</td>\n" +
-    "                    <td>{{view.dates[31].label}}</td>\n" +
-    "                    <td>{{view.dates[32].label}}</td>\n" +
-    "                    <td>{{view.dates[33].label}}</td>\n" +
-    "                    <td>{{view.dates[34].label}}</td>\n" +
+    "                    <td><span>{{view.dates[28].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[29].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[30].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[31].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[32].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[33].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[34].label}}</span></td>\n" +
     "                </tr>\n" +
     "                <tr>\n" +
-    "                    <td>{{view.dates[35].label}}</td>\n" +
-    "                    <td>{{view.dates[36].label}}</td>\n" +
-    "                    <td>{{view.dates[37].label}}</td>\n" +
-    "                    <td>{{view.dates[38].label}}</td>\n" +
-    "                    <td>{{view.dates[39].label}}</td>\n" +
-    "                    <td>{{view.dates[40].label}}</td>\n" +
-    "                    <td>{{view.dates[41].label}}</td>\n" +
+    "                    <td><span>{{view.dates[35].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[36].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[37].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[38].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[39].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[40].label}}</span></td>\n" +
+    "                    <td><span>{{view.dates[41].label}}</span></td>\n" +
     "                </tr>\n" +
     "                </tbody>\n" +
     "            </table>\n" +
@@ -1487,6 +1499,7 @@ angular.module("templates/rcalendar/week.html", []).run(["$templateCache", funct
     "                                    <div ng-class=\"{'calendar-event-wrap': day.events}\" ng-if=\"day.events\"\n" +
     "                                         ng-style=\"{height: 25*day.events.length+'px'}\">\n" +
     "                                        <div ng-repeat=\"displayEvent in day.events\" class=\"calendar-event\"\n" +
+    "                                             ng-class=\"fetchWeekEventClass(displayEvent)\"\n" +
     "                                             ng-click=\"eventSelected({event:displayEvent.event})\"\n" +
     "                                             ng-style=\"{top: 25*displayEvent.position+'px', width: 100*(displayEvent.endIndex-displayEvent.startIndex)+'%', height: '25px'}\">\n" +
     "                                            <div class=\"calendar-event-inner\">{{displayEvent.event.title}}</div>\n" +
@@ -1508,6 +1521,7 @@ angular.module("templates/rcalendar/week.html", []).run(["$templateCache", funct
     "                            <td ng-repeat=\"tm in row track by tm.time\" class=\"calendar-cell\" ng-click=\"select(tm.time, tm.events)\">\n" +
     "                                <div ng-class=\"{'calendar-event-wrap': tm.events}\" ng-if=\"tm.events\">\n" +
     "                                    <div ng-repeat=\"displayEvent in tm.events\" class=\"calendar-event\"\n" +
+    "                                         ng-class=\"fetchWeekEventClass(displayEvent)\"\n" +
     "                                         ng-click=\"eventSelected({event:displayEvent.event})\"\n" +
     "                                         ng-style=\"{top: (37*displayEvent.startOffset/hourParts)+'px',left: 100/displayEvent.overlapNumber*displayEvent.position+'%', width: 100/displayEvent.overlapNumber+'%', height: 37*(displayEvent.endIndex -displayEvent.startIndex - (displayEvent.endOffset + displayEvent.startOffset)/hourParts)+'px'}\">\n" +
     "                                        <div class=\"calendar-event-inner\">{{displayEvent.event.title}}</div>\n" +
@@ -1549,5 +1563,6 @@ angular.module("templates/rcalendar/week.html", []).run(["$templateCache", funct
     "            </div>\n" +
     "        </ion-slide>\n" +
     "    </ion-slide-box>\n" +
-    "</div>");
+    "</div>\n" +
+    "");
 }]);
